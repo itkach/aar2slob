@@ -1,0 +1,38 @@
+* aar2slob
+
+  aar2slob converts Aard Dictionary .aar files to slob format.
+
+** Installation
+
+   Create Python 3 virtual environment and installed slob.py as
+   described at http://github.org/itkach/slob/. In this virtual
+   environment run
+
+   #+BEGIN_SRC sh
+   pip install git+https://github.com/itkach/aar2slob.git
+   #+END_SRC
+
+
+** Usage
+
+   #+BEGIN_SRC
+python -m aar2slob [-h] [-o OUTPUT_FILE] [-w WORK_DIR]
+                   input_file [input_file ...]
+
+positional arguments:
+  input_file            Name of Aard Dictionary file to read
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -o OUTPUT_FILE, --output-file OUTPUT_FILE
+                        Name of output slob file
+  -w WORK_DIR, --work-dir WORK_DIR
+                        Directory for temporary files created during
+                        compilation. Default: .
+   #+END_SRC
+
+   For example, to convert /wordnet-3.0-1.html.aar/:
+
+   #+BEGIN_SRC
+   python -m aar2slob wordnet-3.0-1.html.aar
+   #+END_SRC
