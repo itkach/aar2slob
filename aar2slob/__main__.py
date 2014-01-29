@@ -96,6 +96,10 @@ def main():
                             help='Name of Aard Dictionary file to read')
     arg_parser.add_argument('-o', '--output-file', type=str,
                             help='Name of output slob file')
+    arg_parser.add_argument('-c', '--compression',
+                            choices=['lzma2', 'zlib', 'bz2'],
+                            default='lzma2',
+                            help='Name of compression to use')
     arg_parser.add_argument('-w', '--work-dir', type=str, default='.',
                             help=('Directory for temporary files '
                                   'created during compilation. '
@@ -133,7 +137,11 @@ def main():
         elif e.name == 'end_sort':
             p(' sorted in %.2fs' % (time.time() - sort_t0))
 
-    with slob.create(outname, workdir=args.work_dir, observer=observer) as w:
+    with slob.create(outname,
+                     compression=args.compression,
+                     workdir=args.work_dir,
+                     min_bin_size=512*1024,
+                     observer=observer) as w:
         css_tags = []
         for name in ('shared.css',
                      'mediawiki_shared.css',
