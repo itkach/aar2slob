@@ -19,6 +19,7 @@ import zlib
 import bz2
 import os
 import mmap
+import codecs
 
 from bisect import bisect_left
 from struct import calcsize, unpack
@@ -393,15 +394,15 @@ class Volume(object):
         self.article_count = meta.get('article_count', self.index_count)
 
         self.index_language = meta.get('index_language', '')
-        if isinstance(self.index_language, str):
-            self.index_language = self.index_language.encode('utf8')
+        # if isinstance(self.index_language, str):
+        #     self.index_language = codecs.encode(self.index_language, 'utf8')
         locale_index_language = Locale(self.index_language).getLanguage()
         if locale_index_language:
             self.index_language = locale_index_language
 
         self.article_language = meta.get('article_language', '')
-        if isinstance(self.article_language, str):
-            self.article_language = self.index_language.encode('utf8')
+        # if isinstance(self.article_language, str):
+        #     self.article_language = codecs.encode(self.index_language, 'utf8')
         locale_article_language = Locale(self.index_language).getLanguage()
         if locale_article_language:
             self.article_language = locale_article_language
@@ -497,7 +498,7 @@ class Volume(object):
 
     def __str__(self):
         if isinstance(self.file_name, str):
-            return self.file_name.encode('utf8')
+            return codecs.encode(self.file_name, 'utf8')
         else:
             return self.file_name
 

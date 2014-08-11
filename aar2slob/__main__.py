@@ -8,6 +8,7 @@ import urllib.parse
 
 from multiprocessing import Pool
 from contextlib import closing
+from datetime import datetime, timezone
 
 from bs4 import BeautifulSoup
 
@@ -97,9 +98,22 @@ def main():
     arg_parser.add_argument('-o', '--output-file', type=str,
                             help='Name of output slob file')
     arg_parser.add_argument('-c', '--compression',
-                            choices=['lzma2', 'zlib', 'bz2'],
+                            choices=['lzma2', 'zlib'],
                             default='lzma2',
                             help='Name of compression to use')
+    arg_parser.add_argument('-b', '--bin-size',
+                            type=int,
+                            default=384,
+                            help='Minimum storage bin size in kilobytes')
+    arg_parser.add_argument('-u', '--uri', type=str,
+                            help=('Value for uri tag. Slob-specific '
+                                  'article URLs such as bookmarks can be '
+                                  'migrated to another slob based on '
+                                  'matching "uri" tag values'))
+    arg_parser.add_argument('-l', '--license', type=str,
+                            help=('Value for license tag. '
+                                  'This should be name under which '
+                                  'the license is commonly known.'))
     arg_parser.add_argument('-w', '--work-dir', type=str, default='.',
                             help=('Directory for temporary files '
                                   'created during compilation. '
@@ -111,7 +125,7 @@ def main():
     outname = args.output_file
     if outname is None:
         basename = os.path.basename(fnames[0])
-        noext,_ext = os.path.splitext(basename)
+        noext, _ext = os.path.splitext(basename)
         outname = os.path.extsep.join((noext, 'slob'))
 
     t0 = time.time()
@@ -140,7 +154,7 @@ def main():
     with slob.create(outname,
                      compression=args.compression,
                      workdir=args.work_dir,
-                     min_bin_size=512*1024,
+                     min_bin_size=args.bin_size*1024,
                      observer=observer) as w:
         css_tags = []
         for name in ('shared.css',
@@ -150,6 +164,10 @@ def main():
             w.add(read_file(name), key, content_type=CSS)
             css_tags.append(LINK_TAG.format(key))
         css_tags = '\n'.join(css_tags)
+
+        w.tag('created_at', datetime.now(timezone.utc).isoformat())
+        if args.uri:
+            w.tag('uri', args.uri)
 
         for fname in fnames:
             with closing(dictionary.Volume(fname)) as d:
