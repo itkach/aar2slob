@@ -73,7 +73,7 @@ def convert(item):
         a['id'] = 'view-online-link'
         a['href'] = article_url
         title_heading = soup.find('h1')
-        if title_heading:
+        if title_heading and title_heading.string:
             title_heading.string.wrap(a)
 
     content = ''.join((
