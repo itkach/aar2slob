@@ -4,6 +4,7 @@ import os
 import re
 import sys
 import time
+import traceback
 import urllib.parse
 
 from multiprocessing import Pool
@@ -43,6 +44,13 @@ RE_SPACE = re.compile(r'\s+')
 
 
 def convert(item):
+    try:
+        return _convert(item)
+    except Exception:
+        traceback.print_exc()
+        return (False, None, None)
+
+def _convert(item):
     title, article, css_tags, article_url_template = item
     articletuple = json.loads(article.decode('utf-8'))
     if len(articletuple) == 3:
@@ -194,6 +202,9 @@ def main():
                         if i and i % 5000 == 0:
                             p(' {0:.2f}%\n'.format(100*(i/count)))
                     redirect, content, key_frag = converted
+                    if content is None:
+                        p('x')
+                        continue
                     if redirect:
                         w.add_alias(content, key_frag)
                     else:
