@@ -173,7 +173,6 @@ def main():
             css_tags.append(LINK_TAG.format(key))
         css_tags = '\n'.join(css_tags)
 
-        w.tag('created_at', datetime.now(timezone.utc).isoformat())
         if args.uri:
             w.tag('uri', args.uri)
 
