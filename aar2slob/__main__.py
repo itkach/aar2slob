@@ -138,14 +138,28 @@ def main():
                             help='End index')
 
     arg_parser.add_argument('-u', '--uri', type=str,
+                            default='',
                             help=('Value for uri tag. Slob-specific '
                                   'article URLs such as bookmarks can be '
                                   'migrated to another slob based on '
                                   'matching "uri" tag values'))
-    arg_parser.add_argument('-l', '--license', type=str,
-                            help=('Value for license tag. '
+    arg_parser.add_argument('-l', '--license-name', type=str,
+                            default='',
+                            help=('Value for license.name tag. '
                                   'This should be name under which '
                                   'the license is commonly known.'))
+
+    arg_parser.add_argument('-L', '--license-url', type=str,
+                            default='',
+                            help=('Value for license.url tag. '
+                                  'This should be a URL for license text'))
+
+    arg_parser.add_argument('-a', '--created-by', type=str,
+                            default='',
+                            help=('Value for created.by tag. '
+                                  'Identifier (e.g. name or email) '
+                                  'for slob file creator'))
+
     arg_parser.add_argument('-w', '--work-dir', type=str, default='.',
                             help=('Directory for temporary files '
                                   'created during compilation. '
@@ -197,19 +211,19 @@ def main():
             css_tags.append(LINK_TAG.format(key))
         css_tags = '\n'.join(css_tags)
 
-        if args.uri:
-            w.tag('uri', args.uri)
+        w.tag('license.name', args.license_name)
+        w.tag('license.url', args.license_url)
+        w.tag('created.by', args.created_by)
 
         for fname in fnames:
             with closing(dictionary.Volume(fname)) as d:
 
                 article_url_template = d.article_url
-                if d.title:
-                    w.tag('label', d.title)
-                if d.source:
-                    w.tag('source', d.source)
-                if d.copyright:
-                    w.tag('copyright', d.copyright)
+                w.tag('label', d.title if d.title else fname)
+                source = d.source if d.source else ''
+                w.tag('source', d.source if d.source else '')
+                w.tag('uri', args.uri if args.uri else source)
+                w.tag('copyright', d.copyright if d.copyright else '')
 
                 count = len(d.articles)
                 start = args.start if args.start else 0
