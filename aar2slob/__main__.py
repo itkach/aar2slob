@@ -83,14 +83,15 @@ def _convert(item):
             '$1', urllib.parse.quote(title))
         a = E.A(id="view-online-link", href=article_url)
         title_heading = doc.cssselect('h1')
-        if not title_heading is None:
+        if len(title_heading) > 0:
             title_heading = title_heading[0]
             if title_heading.text:
                 a.text = title_heading.text
                 title_heading.text = ''
                 title_heading.append(a)
         else:
-            a.text = key
+            a.text = ''
+            a.attrib['class'] = 'notext'
             body = doc.find('body')
             if not body is None:
                 body.insert(0, a)

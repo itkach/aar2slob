@@ -21,18 +21,29 @@ a[href ^="#_r"] {
     text-decoration: none;
 }
 
-.thumbinner, .thumbcaption, .magnify, 
+.thumbinner, .thumbcaption, .magnify,
 .vertical-navbox, .tmbox, .maptable,
 .printonly  {
     display: none;
 }
 
 #aard-redirectinfo {
-    border: thin solid gray; 
-    background-color: #eeeeee; 
-    margin-left: auto; 
+    border: thin solid gray;
+    background-color: #eeeeee;
+    margin-left: auto;
     margin-right: auto;
     margin-top: 5px;
     margin-top: 0px;
     padding: 5px;
+}
+
+#view-online-link.notext {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 10px;
+    background-color: rgba(128, 128, 128, 0.1);
+    background-position: center;
+    border: thin solid lightgray;
+    margin: 2px;
 }
