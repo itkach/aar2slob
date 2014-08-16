@@ -11,7 +11,9 @@ from multiprocessing import Pool
 from contextlib import closing
 from datetime import datetime, timezone
 
-from bs4 import BeautifulSoup
+import lxml.html
+
+from lxml.html import builder as E
 
 import slob
 
@@ -19,7 +21,6 @@ from . import dictionary
 
 HTML = 'text/html; charset=utf-8'
 CSS = 'text/css'
-RE_HEADING = re.compile('h[1-6]')
 RE_SPACE = re.compile(r'\s+')
 LINK_TAG = '<link rel="stylesheet" href="{0}" type="text/css"></link>'
 
@@ -40,15 +41,13 @@ def split_frag(s):
     return s, ''
 
 
-RE_SPACE = re.compile(r'\s+')
-
-
 def convert(item):
     try:
         return _convert(item)
     except Exception:
         traceback.print_exc()
         return (False, None, None)
+
 
 def _convert(item):
     title, article, css_tags, article_url_template = item
@@ -64,26 +63,39 @@ def _convert(item):
 
     key, fragment = split_frag(title)
     fragment = RE_SPACE.sub('_', fragment)
-    soup = BeautifulSoup(text)
+
+    doc = lxml.html.fromstring(text)
+
     #make footnotes work in browser without js
-    for a in soup('a', onclick=True):
-        onclick = a.get('onclick')
+    for a in doc.cssselect('a[onclick]'):
+        onclick = a.attrib['onclick']
         if onclick.startswith("return s('"):
-            a['href'] = '#'+onclick[10:len(onclick)-2]
-            del a['onclick']
+            a.attrib['href'] = '#'+onclick[10:len(onclick)-2]
+            del a.attrib['onclick']
     #make fragment references work in browser
-    for h in soup(RE_HEADING):
-        h['id'] = RE_SPACE.sub('_', h.text)
+    for h in doc.cssselect('h1,h2,h3,h4,h5,h6'):
+        for item in h:
+            if item.text:
+                item.attrib['id'] = RE_SPACE.sub('_', item.text.strip())
 
     if article_url_template:
         article_url = article_url_template.replace(
             '$1', urllib.parse.quote(title))
-        a = soup.new_tag('a')
-        a['id'] = 'view-online-link'
-        a['href'] = article_url
-        title_heading = soup.find('h1')
-        if title_heading and title_heading.string:
-            title_heading.string.wrap(a)
+        a = E.A(id="view-online-link", href=article_url)
+        title_heading = doc.cssselect('h1')
+        if not title_heading is None:
+            title_heading = title_heading[0]
+            if title_heading.text:
+                a.text = title_heading.text
+                title_heading.text = ''
+                title_heading.append(a)
+        else:
+            a.text = key
+            body = doc.find('body')
+            if not body is None:
+                body.insert(0, a)
+            else:
+                doc.insert(0, a)
 
     content = ''.join((
         '<html>'
@@ -91,7 +103,7 @@ def _convert(item):
         css_tags,
         '</head>'
         '<body>',
-        str(soup),
+        lxml.html.tostring(doc, encoding='unicode'),
         '</body>',
         '</html>'
     )) .encode('utf-8')
