@@ -125,6 +125,17 @@ def main():
                             type=int,
                             default=384,
                             help='Minimum storage bin size in kilobytes')
+
+    arg_parser.add_argument('-s', '--start',
+                            type=int,
+                            default=None,
+                            help='Start index')
+
+    arg_parser.add_argument('-e', '--end',
+                            type=int,
+                            default=None,
+                            help='End index')
+
     arg_parser.add_argument('-u', '--uri', type=str,
                             help=('Value for uri tag. Slob-specific '
                                   'article URLs such as bookmarks can be '
@@ -200,9 +211,11 @@ def main():
                     w.tag('copyright', d.copyright)
 
                 count = len(d.articles)
-
+                start = args.start if args.start else 0
+                end = args.end if args.end else count
                 articles = ((d.words[i], d.articles[i],
-                             css_tags, article_url_template) for i in range(count))
+                             css_tags, article_url_template)
+                            for i in range(start, end))
 
                 workers = Pool()
                 result = workers.imap_unordered(convert, articles)
