@@ -112,17 +112,21 @@ def _convert(item):
     return (False, content, (key, fragment))
 
 
-def main():
+def parse_args():
 
     arg_parser = argparse.ArgumentParser()
+
     arg_parser.add_argument('input_file', nargs='+', type=str,
                             help='Name of Aard Dictionary file to read')
+
     arg_parser.add_argument('-o', '--output-file', type=str,
                             help='Name of output slob file')
+
     arg_parser.add_argument('-c', '--compression',
                             choices=['lzma2', 'zlib'],
                             default='lzma2',
                             help='Name of compression to use')
+
     arg_parser.add_argument('-b', '--bin-size',
                             type=int,
                             default=384,
@@ -145,6 +149,7 @@ def main():
                                   'article URLs such as bookmarks can be '
                                   'migrated to another slob based on '
                                   'matching "uri" tag values'))
+
     arg_parser.add_argument('-l', '--license-name', type=str,
                             default='',
                             help=('Value for license.name tag. '
@@ -167,7 +172,12 @@ def main():
                                   'created during compilation. '
                                   'Default: %(default)s'))
 
-    args = arg_parser.parse_args()
+    return arg_parser.parse_args()
+
+
+def main():
+
+    args = parse_args()
 
     fnames = [os.path.expanduser(name) for name in args.input_file]
     outname = args.output_file
