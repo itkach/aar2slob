@@ -36,14 +36,3 @@ a[href ^="#_r"] {
     margin-top: 0px;
     padding: 5px;
 }
-
-#view-online-link.notext {
-    position: absolute;
-    top: 0;
-    right: 0;
-    padding: 10px;
-    background-color: rgba(128, 128, 128, 0.1);
-    background-position: center;
-    border: thin solid lightgray;
-    margin: 2px;
-}

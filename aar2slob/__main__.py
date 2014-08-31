@@ -90,13 +90,14 @@ def _convert(item):
                 title_heading.text = ''
                 title_heading.append(a)
         else:
-            a.text = ''
-            a.attrib['class'] = 'notext'
+            a.text = key
+            title_heading = E.H1()
+            title_heading.append(a)
             body = doc.find('body')
             if not body is None:
-                body.insert(0, a)
+                body.insert(0, title_heading)
             else:
-                doc.insert(0, a)
+                doc.insert(0, title_heading)
 
     content = ''.join((
         '<html>'
