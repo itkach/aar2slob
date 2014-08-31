@@ -126,7 +126,8 @@ def main():
     arg_parser.add_argument('-b', '--bin-size',
                             type=int,
                             default=384,
-                            help='Minimum storage bin size in kilobytes')
+                            help=('Minimum storage bin size in kilobytes. '
+                                  'Default: %(default)s'))
 
     arg_parser.add_argument('-s', '--start',
                             type=int,
