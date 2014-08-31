@@ -9,5 +9,6 @@ setup(name='aar2slob',
       license='GPL3',
       packages=['aar2slob'],
       package_data={'aar2slob': ['*.css']},
-      install_requires=['Slob >= 1.0', 'lxml', 'cssselect'
-])
+      install_requires=['Slob >= 1.0', 'lxml', 'cssselect'],
+      entry_points={'console_scripts': ['aar2slob=aar2slob:main']}
+)
