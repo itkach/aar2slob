@@ -16,8 +16,10 @@
 ** Usage
 
    #+BEGIN_SRC
-python -m aar2slob [-h] [-o OUTPUT_FILE] [-w WORK_DIR]
-                   input_file [input_file ...]
+usage: aar2slob [-h] [-o OUTPUT_FILE] [-c {lzma2,zlib}] [-b BIN_SIZE]
+                [-s START] [-e END] [-u URI] [-l LICENSE_NAME]
+                [-L LICENSE_URL] [-a CREATED_BY] [-w WORK_DIR]
+                input_file [input_file ...]
 
 positional arguments:
   input_file            Name of Aard Dictionary file to read
@@ -26,6 +28,25 @@ optional arguments:
   -h, --help            show this help message and exit
   -o OUTPUT_FILE, --output-file OUTPUT_FILE
                         Name of output slob file
+  -c {lzma2,zlib}, --compression {lzma2,zlib}
+                        Name of compression to use
+  -b BIN_SIZE, --bin-size BIN_SIZE
+                        Minimum storage bin size in kilobytes
+  -s START, --start START
+                        Start index
+  -e END, --end END     End index
+  -u URI, --uri URI     Value for uri tag. Slob-specific article URLs such as
+                        bookmarks can be migrated to another slob based on
+                        matching "uri" tag values
+  -l LICENSE_NAME, --license-name LICENSE_NAME
+                        Value for license.name tag. This should be name under
+                        which the license is commonly known.
+  -L LICENSE_URL, --license-url LICENSE_URL
+                        Value for license.url tag. This should be a URL for
+                        license text
+  -a CREATED_BY, --created-by CREATED_BY
+                        Value for created.by tag. Identifier (e.g. name or
+                        email) for slob file creator
   -w WORK_DIR, --work-dir WORK_DIR
                         Directory for temporary files created during
                         compilation. Default: .
