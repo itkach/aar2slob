@@ -1,5 +1,6 @@
 import argparse
 import json
+import multiprocessing
 import os
 import re
 import sys
@@ -7,17 +8,16 @@ import time
 import traceback
 import urllib.parse
 
-from multiprocessing import Pool
 from contextlib import closing
 from datetime import datetime, timezone
 
 import lxml.html
-
 from lxml.html import builder as E
 
 import slob
 
-from . import dictionary
+from aar2slob import dictionary
+
 
 HTML = 'text/html; charset=utf-8'
 CSS = 'text/css'
@@ -244,7 +244,7 @@ def main():
                              css_tags, article_url_template)
                             for i in range(start, end))
 
-                workers = Pool()
+                workers = multiprocessing.Pool()
                 result = workers.imap_unordered(convert, articles)
 
                 for i, converted in enumerate(result):
