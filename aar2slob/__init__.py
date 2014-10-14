@@ -23,6 +23,7 @@ HTML = 'text/html; charset=utf-8'
 CSS = 'text/css'
 RE_SPACE = re.compile(r'\s+')
 LINK_TAG = '<link rel="stylesheet" href="{0}" type="text/css"></link>'
+NIGHT_LINK_TAG = '<link rel="alternative stylesheet" href="{0}" type="text/css" title="Dark"></link>'
 
 
 def read_file(name):
@@ -218,9 +219,13 @@ def main():
         for name in ('shared.css',
                      'mediawiki_shared.css',
                      'mediawiki_monobook.css'):
-            key = '_'+name
+            key = '_' + name
             w.add(read_file(name), key, content_type=CSS)
             css_tags.append(LINK_TAG.format(key))
+        name = 'night.css'
+        key = '_' + name
+        w.add(read_file('night.css'), key, content_type=CSS)
+        css_tags.append(NIGHT_LINK_TAG.format(key))
         css_tags = '\n'.join(css_tags)
 
         w.tag('license.name', args.license_name)
