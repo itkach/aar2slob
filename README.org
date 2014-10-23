@@ -29,7 +29,7 @@ optional arguments:
   -o OUTPUT_FILE, --output-file OUTPUT_FILE
                         Name of output slob file
   -c {lzma2,zlib}, --compression {lzma2,zlib}
-                        Name of compression to use
+                        Name of compression to use. Default: lzma2
   -b BIN_SIZE, --bin-size BIN_SIZE
                         Minimum storage bin size in kilobytes. Default: 384
   -s START, --start START
