@@ -126,7 +126,8 @@ def parse_args():
     arg_parser.add_argument('-c', '--compression',
                             choices=['lzma2', 'zlib'],
                             default='lzma2',
-                            help='Name of compression to use')
+                            help=('Name of compression to use. '
+                                  'Default: %(default)s'))
 
     arg_parser.add_argument('-b', '--bin-size',
                             type=int,
