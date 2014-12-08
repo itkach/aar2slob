@@ -55,5 +55,5 @@ optional arguments:
    For example, to convert /wordnet-3.0-1.html.aar/:
 
    #+BEGIN_SRC
-   python -m aar2slob wordnet-3.0-1.html.aar
+   aar2slob wordnet-3.0-1.html.aar
    #+END_SRC
