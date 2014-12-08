@@ -193,7 +193,7 @@ def main():
     if outname is None:
         basename = os.path.basename(fnames[0])
         noext, _ext = os.path.splitext(basename)
-        outname = os.path.extsep.join((noext, 'slob'))
+        outname = os.path.extsep.join((noext, args.compression, 'slob'))
 
     t0 = time.time()
     sort_t0 = None
