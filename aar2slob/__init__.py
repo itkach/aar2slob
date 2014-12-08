@@ -65,6 +65,13 @@ def _convert(item):
     key, fragment = split_frag(title)
     fragment = RE_SPACE.sub('_', fragment)
 
+    if text.startswith('<?'):
+        text = text[text.find('?>')+2:]
+        if text.startswith('<br/>'):
+            text = text[5:]
+        if text.endswith('<br/>'):
+            text = text[0:-5]
+
     doc = lxml.html.fromstring(text)
 
     #make footnotes work in browser without js
