@@ -23,7 +23,7 @@ HTML = 'text/html; charset=utf-8'
 CSS = 'text/css'
 RE_SPACE = re.compile(r'\s+')
 LINK_TAG = '<link rel="stylesheet" href="{0}" type="text/css"></link>'
-NIGHT_LINK_TAG = '<link rel="alternative stylesheet" href="{0}" type="text/css" title="Dark"></link>'
+NIGHT_LINK_TAG = '<link rel="alternate stylesheet" href="{0}" type="text/css" title="Dark"></link>'
 
 
 def read_file(name):
